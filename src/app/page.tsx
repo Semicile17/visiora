@@ -1,16 +1,27 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
+
+import { Button } from '@/components/ui/button'
 import { useTRPC } from '@/trpc/client'
-import { useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import React from 'react'
+import { toast } from 'sonner';
 
 function Page() {
   const trpc = useTRPC();
-  const {data} = useQuery(trpc.createAI.queryOptions({text:'Rohit'}));
+
+  const invoke = useMutation(trpc.invoke.mutationOptions({
+    onSuccess:()=>{
+      toast.success('Background Job Started')
+    }
+  }));
   return (
     <div>
-      
+      <div className='p-4 max-w-7xl mx-auto'>
+        <Button disabled={invoke.isPending} onClick={()=>invoke.mutate({text:"Jhon"})}>
+          Invoke Background Job
+        </Button>
+      </div>
     </div>
   )
 }
